@@ -15,27 +15,33 @@ const Landing = ({ children }: PropsWithChildren) => {
   const [typingSpeed, setTypingSpeed] = useState(150);
 
   useEffect(() => {
-    let timer = setTimeout(() => {
-      const i = loopNum % typewriterTexts.length;
-      const fullText = typewriterTexts[i];
+    let timer: number;
+    const i = loopNum % typewriterTexts.length;
+    const fullText = typewriterTexts[i];
 
-      setText(
-        isDeleting
-          ? fullText.substring(0, text.length - 1)
-          : fullText.substring(0, text.length + 1)
-      );
-
-      setTypingSpeed(isDeleting ? 30 : Math.random() * 100 + 50);
-
-      if (!isDeleting && text === fullText) {
-        setTimeout(() => setIsDeleting(true), 2000);
-        setTypingSpeed(150);
-      } else if (isDeleting && text === "") {
+    if (isDeleting) {
+      if (text === "") {
         setIsDeleting(false);
         setLoopNum(loopNum + 1);
         setTypingSpeed(500);
+      } else {
+        timer = setTimeout(() => {
+          setText(fullText.substring(0, text.length - 1));
+          setTypingSpeed(30);
+        }, typingSpeed);
       }
-    }, typingSpeed);
+    } else {
+      if (text === fullText) {
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 2000);
+      } else {
+        timer = setTimeout(() => {
+          setText(fullText.substring(0, text.length + 1));
+          setTypingSpeed(Math.random() * 50 + 50);
+        }, typingSpeed);
+      }
+    }
 
     return () => clearTimeout(timer);
   }, [text, isDeleting, loopNum, typingSpeed]);
