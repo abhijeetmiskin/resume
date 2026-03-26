@@ -13,9 +13,8 @@ const Navbar = () => {
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
+      smooth: 0,
+      effects: false,
       autoResize: true,
       ignoreMobileResize: true,
     });
